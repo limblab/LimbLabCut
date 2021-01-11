@@ -7,7 +7,6 @@ Created on Fri Dec 18 11:41:30 2020
 # imports and other stuff
 import sys
 
-   
 import numpy as np
 import toml
 import glob
@@ -16,8 +15,9 @@ import yaml
 import pandas as pd
 
 # add folder with calibration functions to path
-calib_folder = r'D:\Lab\GIT\proc-joe\Limblab_DLC\cam_calib_20200508'
+calib_folder = r'D:\Lab\GIT\LimbLabCut\cam_calib_20200508'
 sys.path.append(calib_folder)
+sys.path.append(calib_folder+'\*')
 from utils.utils import load_config
 from calibration.intrinsic import calibrate_intrinsic
 from calibration.extrinsic import calibrate_extrinsic
@@ -27,10 +27,8 @@ from utils.vis_utils import generate_three_dim_pictures
 from utils.triangulation_utils import add_static_points
 
 
-
-
 # set project folder 
-project_folder = r'D:\Lab\Data\DLC_videos\Han_20201204_rwFreeReach'
+project_folder = r'D:\Lab\Data\DLC_videos\Han_20201223_rwTwoPlanes'
 
 # determine if we are using filtered data or not
 use_filtered_data = True
@@ -50,7 +48,7 @@ parsed_toml = toml.load(calib_folder + r'\config_master.toml')
 
 # upate calib video path and prefix and extension
 parsed_toml['calibration']['calib_video_path'] = project_folder + r'\videos\calib'
-parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201204_0000'
+parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201223_0000'
 
 # update paths to 2d data while removing (or keeping) videos with filtered
 if(use_filtered_data):
