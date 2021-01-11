@@ -50,6 +50,10 @@ parsed_toml = toml.load(calib_folder + r'\config_master.toml')
 parsed_toml['calibration']['calib_video_path'] = project_folder + r'\videos\calib'
 parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201223_0000'
 
+
+
+
+
 # update paths to 2d data while removing (or keeping) videos with filtered
 if(use_filtered_data):
     vid_list = glob.glob(project_folder + r'\videos\*filtered.csv')
@@ -90,9 +94,6 @@ recon_config_file = project_folder + r'\recon_config.toml'
 
 with open(recon_config_file,'w+') as file:
     toml.dump(parsed_toml,file)
-
-
-
 
 config = load_config(recon_config_file)
 
