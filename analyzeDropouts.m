@@ -2,12 +2,12 @@
 % rate, dropout times, etc.
 
 
-video_folder = 'D:\Lab\Data\DLC_videos\Crackle_20201202\';
+video_folder = 'D:\Lab\Data\DLC_videos\Han_20201223_rwTwoPlanes\videos\';
 video_list = dir([video_folder,'*.avi.xiinfo*']);
 
 
 %%
-vid_idx = 4;
+vid_idx = 5;
 fid = fopen([video_list(vid_idx).folder,filesep,video_list(vid_idx).name]);
 
 first_frame_val = -1;

@@ -70,38 +70,34 @@ def align_frames(ts_list):
         dt_list = ts_list[vid_idx][1:]-ts_list[vid_idx][0:-1]
         dt = np.median(ts_list[vid_idx][1:]-ts_list[vid_idx][0:-1])
 
-    max_dur_idx = np.argmax(dur_list)
-    # condition 1: the four lists have the same timestamp duration. In this case,
-    # subtract the first timestamp, and then match based on timestamps (accounting for a bit of noise)
-    if(np.all(abs(dur_list-dur_list[0]) < dt*0.5)):
-        # use longest length to make ground truth array[0,1,2,3,4....], then
-        # subtract first timestamp from each list, and determine the idx for each frame
-        master_framenums = np.arange(0,np.ceil(dur_list[max_dur_idx]/dt)+1,1).astype(int)
-        master_frame_ts = master_framenums*dt
-        
-        for vid_idx in range(len(ts_list)):
-            ts = ts_list[vid_idx] - ts_list[vid_idx][0]
-            frame_list = np.zeros_like(master_framenums) - 1
-            # match lists up!
-            for t_idx in range(len(ts)):
-                # find master_frame_ts that is closest to ts[t_idx]
-                master_idx = np.argmin(abs(master_frame_ts-ts[t_idx]))
-                dist = abs(master_frame_ts[master_idx] - ts[t_idx])
-                # if the distance to that frame is sufficiently small, append frame num to frame_list
-                if(dist < dt*0.5):
-                    frame_list[master_framenums[master_idx]] = t_idx
-                else:
-                    print("hmmm")
-                
-            all_cams_frame_list.append(frame_list)
-            # get list of good frames (where there were no dropouts)
-            if(vid_idx==0):
-                is_good_frame = frame_list >= 0 
+    max_dur_idx = np.argmax(dur_list)   
+    # subtract the first timestamp, and then match based on timestamps (accounting for a bit of noise)    
+    # use longest length to make ground truth array[0,1,2,3,4....], then
+    # subtract first timestamp from each list, and determine the idx for each frame
+    master_framenums = np.arange(0,np.ceil(dur_list[max_dur_idx]/dt)+1,1).astype(int)
+    master_frame_ts = master_framenums*dt
+    
+    for vid_idx in range(len(ts_list)):
+        ts = ts_list[vid_idx] - ts_list[vid_idx][0]
+        frame_list = np.zeros_like(master_framenums) - 1
+        # match lists up!
+        for t_idx in range(len(ts)):
+            # find master_frame_ts that is closest to ts[t_idx]
+            master_idx = np.argmin(abs(master_frame_ts-ts[t_idx]))
+            dist = abs(master_frame_ts[master_idx] - ts[t_idx])
+            # if the distance to that frame is sufficiently small, append frame num to frame_list
+            if(dist < dt*0.5):
+                frame_list[master_framenums[master_idx]] = t_idx
             else:
-                is_good_frame = np.all([is_good_frame==1, frame_list>=0],axis=0)
-    # condition 2: the four lists do not have the same timestamp duration. hmm
-    else:
-        print("timestamps do not have same duration, something is not right")
+                print("hmmm")
+            
+        all_cams_frame_list.append(frame_list)
+        # get list of good frames (where there were no dropouts)
+        if(vid_idx==0):
+            is_good_frame = frame_list >= 0 
+        else:
+            is_good_frame = np.all([is_good_frame==1, frame_list>=0],axis=0)
+
     
     good_frame_nums = np.argwhere(is_good_frame)
     good_frame_nums = np.reshape(good_frame_nums,(len(good_frame_nums),))

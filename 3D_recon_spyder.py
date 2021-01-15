@@ -28,7 +28,7 @@ from utils.triangulation_utils import add_static_points
 
 
 # set project folder 
-project_folder = r'D:\Lab\Data\DLC_videos\Han_20201223_rwTwoPlanes'
+project_folder = r'D:\Lab\Data\DLC_videos\Han_20201222_rwTwoPlanes'
 
 # determine if we are using filtered data or not
 use_filtered_data = True
@@ -48,7 +48,7 @@ parsed_toml = toml.load(calib_folder + r'\config_master.toml')
 
 # upate calib video path and prefix and extension
 parsed_toml['calibration']['calib_video_path'] = project_folder + r'\videos\calib'
-parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201223_0000'
+parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201222_0000'
 
 
 
@@ -143,7 +143,8 @@ if(use_reference_frame):
     
     
 #%% edit config to only use specific videos for 3D reconstruction?
-    
+config = load_config(recon_config_file)
+
 # make 3D recon folder if needed
 if(not os.path.isdir(parsed_toml['triangulation']['reconstruction_output_path'])):
     os.mkdir(parsed_toml['triangulation']['reconstruction_output_path'])

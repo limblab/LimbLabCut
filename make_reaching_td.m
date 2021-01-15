@@ -1,6 +1,6 @@
 %% setup initial parameters and data folder   
 
-    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201223_rwTwoPlanes\'; % DLC project folder
+    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201222_rwTwoPlanes\'; % DLC project folder
     
     mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Han_13B1\map files\Left S1\SN 6251-001459.cmp';
     
@@ -43,6 +43,7 @@
     cds_list = cell(numel(nev_file_name),1);
     td_list = cell(numel(nev_file_name),1);
     
+    
     for i_file = 1:numel(nev_file_name)
         % number is last 3 values in filename
         num_list(i_file) = str2num(nev_file_name(i_file).name(end-6:end-4));
@@ -60,7 +61,7 @@
         end
         cds = commonDataStructure();
         cds.file2cds(strcat(nev_file_name(i_file).folder,filesep,nev_file_name(i_file).name),input_data.array,input_data.monkey,input_data.ranBy,...
-            input_data.lab,input_data.mapFile,curr_task,'recoverPreSync','ignoreJumps','ignoreFilecat');
+            input_data.lab,input_data.mapFile,curr_task,'recoverPreSync','unsanitizedTimes');
         
         cds_list{i_file} = cds;
         clear cds;
@@ -73,14 +74,14 @@
     nev_file_name = nev_file_name(sort_idx);
     
     
-% load in 3D reaching data and place in cds. Need entire num_list since that is the order the csv files are in 
+%% load in 3D reaching data and place in cds. Need entire num_list since that is the order the csv files are in 
     % e.g: csv_0 = min value in num_list, then it increases and so on
     for i_file = 1:numel(dlc_file_name)
         cds_list{i_file}.loadRawMarkerDataDLC([dlc_file_name(i_file).folder,filesep,dlc_file_name(i_file).name]);
     end
 
 %% convert to trial data
-if(use_td)
+% if(use_td)
     td_params = [];
     td_params.all_points = 1;
     td_params.include_ts = 1;
@@ -97,4 +98,4 @@ if(use_td)
         end
         
     end
-end
+% end
