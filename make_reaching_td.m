@@ -1,10 +1,10 @@
 %% setup initial parameters and data folder   
 
-    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201222_rwTwoPlanes\'; % DLC project folder
+    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201204_rwFreeReach\'; % DLC project folder
     
     mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Han_13B1\map files\Left S1\SN 6251-001459.cmp';
     
-    use_td = 0;
+    use_td = 1;
     
     input_data.array = 'arrayLeftS1';
     input_data.monkey = 'monkeyHan';

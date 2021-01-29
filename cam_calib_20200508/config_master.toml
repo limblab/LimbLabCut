@@ -40,7 +40,7 @@ video_extension = 'avi'
 
 [triangulation]
 axes = [
-    ["y", "pointX", "pointY"], 
+    ["x", "pointY", "pointX"], 
     ["z", "pointX", "pointZ"]]
 
 reference_point = "pointX"
