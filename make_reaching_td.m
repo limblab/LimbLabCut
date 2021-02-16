@@ -80,6 +80,24 @@
         cds_list{i_file}.loadRawMarkerDataDLC([dlc_file_name(i_file).folder,filesep,dlc_file_name(i_file).name]);
     end
 
+%% convert DLC data to open sim data and make a .trc file
+    md_opensim = {};
+    for i_file = 1:numel(cds_list)
+        md_opensim{i_file} = transformForOpenSimDLC(cds_list{i_file});
+        
+        trc_fname = strrep([input_data.folderpath,'neural-data\',nev_file_name(i_file).name],'mat','trc');
+        
+%         writeTRCFile(md_opensim{i_file},trc_fname);
+    end
+
+    
+%% load in opensim data (if we want to do that)
+    for i_file = 1:numel(cds_list)
+        % check for open sim files?
+        
+    end
+    
+    
 %% convert to trial data
 % if(use_td)
     td_params = [];

@@ -28,7 +28,7 @@ from utils.triangulation_utils import add_static_points
 
 
 # set project folder 
-project_folder = r'D:\Lab\Data\DLC_videos\Han_20201204_rwFreeReach'
+project_folder = r'D:\Lab\Data\DLC_videos\Han_20201203_rwFreeReach'
 
 # determine if we are using filtered data or not
 use_filtered_data = True
@@ -40,7 +40,7 @@ use_reference_frame = True
 n_cams = 4
 
 # determine if making videos at the end of this (can take awhile)
-make_videos = False
+make_videos = True
 
 # setup config file 
 # load basic toml folder and then fill out relevant entries
@@ -48,7 +48,7 @@ parsed_toml = toml.load(calib_folder + r'\config_master.toml')
 
 # upate calib video path and prefix and extension
 parsed_toml['calibration']['calib_video_path'] = project_folder + r'\videos\calib'
-parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201204_0000'
+parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201203_0000'
 
 
 
@@ -144,7 +144,6 @@ if(use_reference_frame):
     
 #%% edit config to only use specific videos for 3D reconstruction?
 config = load_config(recon_config_file)
-
 # make 3D recon folder if needed
 if(not os.path.isdir(parsed_toml['triangulation']['reconstruction_output_path'])):
     os.mkdir(parsed_toml['triangulation']['reconstruction_output_path'])
@@ -171,5 +170,16 @@ for i_set in range(num_camera_sets):
     
 config["paths_to_2d_data"] = vid_list_all
 
-#%% Testing if the generated 3D results makes sense, by calculating the distance between wrist and hand
-
+#%% Save 3d recovery json file
+import numpy as np
+from json import JSONEncoder
+import json
+class NumpyArrayEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return JSONEncoder.default(self, obj)
+with open(Recovery_3D_path, "w") as write_file:
+    json.dump(recovery, write_file, cls=NumpyArrayEncoder)
+    
+    
