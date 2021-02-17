@@ -1,6 +1,6 @@
 %% setup initial parameters and data folder   
 
-    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201204_rwFreeReach\'; % DLC project folder
+    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201222_rwTwoPlanes\'; % DLC project folder
     
     mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Han_13B1\map files\Left S1\SN 6251-001459.cmp';
     
@@ -26,14 +26,14 @@
 
     nev_file_name = dir('neural-data\*nev*');
     
-    % remove filename with .mat, also switch .mat to .nev
+%     % remove filename with .mat, also switch .mat to .nev
     keep_mask = ones(size(nev_file_name));
-    for i_nev = 1:numel(nev_file_name)
-        nev_file_name(i_nev).name = [nev_file_name(i_nev).name(1:end-3),'mat'];
-        if(~isempty(strfind(nev_file_name(i_nev).name,'-s')))
-            keep_mask(i_nev) = 0;
-        end
-    end
+%     for i_nev = 1:numel(nev_file_name)
+%         nev_file_name(i_nev).name = [nev_file_name(i_nev).name(1:end-3),'mat'];
+%         if(~isempty(strfind(nev_file_name(i_nev).name,'-s')))
+%             keep_mask(i_nev) = 0;
+%         end
+%     end
     
     nev_file_name = nev_file_name(keep_mask==1);
     dlc_file_name = dir('reconstructed-3d-data\*.csv');
@@ -55,7 +55,7 @@
         % load in cds, save extension so that we can line 3D tracking data
         % up with correct file. Also save which experiment type this is
         if(~isempty(strfind(task_list{i_file},'RT3D')))
-            curr_task = 'taskUnknown';
+            curr_task = 'tasknone';
         else
             curr_task = input_data.task;
         end
@@ -102,7 +102,7 @@
 % if(use_td)
     td_params = [];
     td_params.all_points = 1;
-    td_params.include_ts = 1;
+    td_params.include_ts = 0;
     for i_cds = 1:numel(cds_list)
         if(~isempty(strfind(task_list{i_cds},'RT3D')) || isempty(cds_list{i_cds}.trials))
             td_params.noTrials=true;

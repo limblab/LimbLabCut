@@ -93,15 +93,15 @@ def align_frames(ts_list):
             
         all_cams_frame_list.append(frame_list)
         # get list of good frames (where there were no dropouts)
-        if(vid_idx==0):
-            is_good_frame = frame_list >= 0 
-        else:
-            is_good_frame = np.all([is_good_frame==1, frame_list>=0],axis=0)
+        #if(vid_idx==0):
+        #    is_good_frame = frame_list >= 0 
+        #else:
+        #    is_good_frame = np.all([is_good_frame==1, frame_list>=0],axis=0)
 
     
-    good_frame_nums = np.argwhere(is_good_frame)
-    good_frame_nums = np.reshape(good_frame_nums,(len(good_frame_nums),))
-    return all_cams_frame_list, good_frame_nums
+    #good_frame_nums = np.argwhere(is_good_frame)
+    #good_frame_nums = np.reshape(good_frame_nums,(len(good_frame_nums),))
+    return all_cams_frame_list
     
     
 
@@ -131,7 +131,7 @@ def get_framenums(vid_indices, videos):
         lines = info_file.readlines()
         
         for line in lines:
-            if("timestamp" in line): # find number and store
+            if("frame timestamp" in line): # find number and store
                 temp_list=np.append(temp_list,(int(line[line.index('\"')+1:-4])))
         
         # pop first ts_list entry if it's effectively 0
@@ -148,6 +148,6 @@ def get_framenums(vid_indices, videos):
         counter = counter + 1
         
                 
-    all_cams_frame_list,good_frame_nums = align_frames(ts_list)   
+    all_cams_frame_list = align_frames(ts_list)   
     
-    return all_cams_frame_list, good_frame_nums, popped_first_entry
+    return all_cams_frame_list, popped_first_entry

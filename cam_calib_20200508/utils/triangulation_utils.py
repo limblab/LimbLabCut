@@ -67,8 +67,8 @@ def load_2d_data(config, vid_indices, bp_interested):
         
     videos = temp_vid_list
     
-    all_frame_list, good_frame_nums, popped_first_entry = get_framenums(vid_indices, videos)   
-    is_good_frame = np.zeros((good_frame_nums[-1]+1,))
+    all_frame_list, popped_first_entry = get_framenums(vid_indices, videos)   
+    is_good_frame = np.zeros(len(all_frame_list[0]),)
     # all_points_raw = np.zeros((length, len(cam_names), len(bodyparts), 2))
     # all_scores = np.zeros((length, len(cam_names), len(bodyparts)))
     
@@ -81,13 +81,21 @@ def load_2d_data(config, vid_indices, bp_interested):
             out['coords'] = out['coords'][1:,:,:]
         
         # adjust out idx based on all_frame_list and good_frame_nums
-        coords_adj = np.zeros((good_frame_nums[-1]+1,out['coords'].shape[1],out['coords'].shape[2])) - 10000
-        scores_adj = np.zeros((good_frame_nums[-1]+1,out['coords'].shape[1])) - 10000
+        coords_adj = np.zeros((len(all_frame_list[0]),out['coords'].shape[1],out['coords'].shape[2]))
+        coords_adj.fill(np.nan)
+        scores_adj = np.zeros((len(all_frame_list[0]),out['coords'].shape[1]))
+        scores_adj.fill(np.nan)
         
-        for i_coord in range(out['length']):
-            coords_adj[all_frame_list[ix_cam][good_frame_nums[i_coord]],:,:] = out['coords'][i_coord,:,:]
-            scores_adj[all_frame_list[ix_cam][good_frame_nums[i_coord]],:] = out['scores'][i_coord,:]
-            is_good_frame[all_frame_list[ix_cam][good_frame_nums[i_coord]]] = 1
+        for i_frame in range(len(all_frame_list[0])): 
+            if(all_frame_list[ix_cam][i_frame] < out['length'] and all_frame_list[ix_cam][i_frame]>= 0): # -1 means it was a dropout
+                coords_adj[i_frame,:,:] = out['coords'][all_frame_list[ix_cam][i_frame],:,:]
+                scores_adj[i_frame,:] = out['scores'][all_frame_list[ix_cam][i_frame],:]
+                is_good_frame[i_frame] = 1
+            
+            # previous attempt to do this, which I think was close, but confusing
+            #coords_adj[all_frame_list[ix_cam][good_frame_nums[i_coord]],:,:] = out['coords'][i_coord,:,:]
+            #scores_adj[all_frame_list[ix_cam][good_frame_nums[i_coord]],:] = out['scores'][i_coord,:]
+            #is_good_frame[all_frame_list[ix_cam][good_frame_nums[i_coord]]] = 1
             
         all_points_raw.append(coords_adj)
         all_scores.append(scores_adj)

@@ -28,19 +28,19 @@ from utils.triangulation_utils import add_static_points
 
 
 # set project folder 
-project_folder = r'D:\Lab\Data\DLC_videos\Han_20201203_rwFreeReach'
+project_folder = r'D:\Lab\Data\DLC_videos\Han_20201222_rwTwoPlanes'
 
 # determine if we are using filtered data or not
 use_filtered_data = True
 
 # using reference frame or use an arbitrary frame?
-use_reference_frame = True
+use_reference_frame = False
 
 # set number of cameras
 n_cams = 4
 
 # determine if making videos at the end of this (can take awhile)
-make_videos = True
+make_videos = False
 
 # setup config file 
 # load basic toml folder and then fill out relevant entries
@@ -48,9 +48,7 @@ parsed_toml = toml.load(calib_folder + r'\config_master.toml')
 
 # upate calib video path and prefix and extension
 parsed_toml['calibration']['calib_video_path'] = project_folder + r'\videos\calib'
-parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201203_0000'
-
-
+parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201222_0000'
 
 
 
