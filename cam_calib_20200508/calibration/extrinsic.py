@@ -271,9 +271,18 @@ def get_matrices(vid_indices, videos, intrinsics_dict, board, skip=40):
     all_points = []
 
     # deal with dropouts by getting list of true framenums for each camera
-    all_frame_list, good_frame_nums, popped_first_entry = get_framenums(vid_indices, videos)        
-    minlen = len(good_frame_nums)
+    all_frame_list, popped_first_entry = get_framenums(vid_indices, videos)        
 
+    # get set of good frames (where all 4 cameras have entries)
+    is_good_frame = np.ones(len(all_frame_list[0]))
+    for ix_cam in range(len(all_frame_list)):
+        for i_frame in range(len(all_frame_list[0])): 
+                if(all_frame_list[ix_cam][i_frame] >= len(is_good_frame) or all_frame_list[ix_cam][i_frame] < 0): # -1 means it was a dropout
+                    is_good_frame[i_frame] = 0
+
+    good_frame_nums = np.argwhere(is_good_frame)
+    good_frame_nums = good_frame_nums.reshape(len(good_frame_nums),)
+    
     for framenum in good_frame_nums:
         M_dict = dict()
         point_dict = dict()

@@ -1,6 +1,6 @@
 %% setup initial parameters and data folder   
 
-    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201222_rwTwoPlanes\'; % DLC project folder
+    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201204_rwFreeReach\'; % DLC project folder
     
     mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Han_13B1\map files\Left S1\SN 6251-001459.cmp';
     
@@ -28,12 +28,12 @@
     
 %     % remove filename with .mat, also switch .mat to .nev
     keep_mask = ones(size(nev_file_name));
-%     for i_nev = 1:numel(nev_file_name)
-%         nev_file_name(i_nev).name = [nev_file_name(i_nev).name(1:end-3),'mat'];
-%         if(~isempty(strfind(nev_file_name(i_nev).name,'-s')))
-%             keep_mask(i_nev) = 0;
-%         end
-%     end
+    for i_nev = 1:numel(nev_file_name)
+        nev_file_name(i_nev).name = [nev_file_name(i_nev).name(1:end-3),'mat'];
+        if(~isempty(strfind(nev_file_name(i_nev).name,'-s')))
+            keep_mask(i_nev) = 0;
+        end
+    end
     
     nev_file_name = nev_file_name(keep_mask==1);
     dlc_file_name = dir('reconstructed-3d-data\*.csv');
@@ -87,15 +87,26 @@
         
         trc_fname = strrep([input_data.folderpath,'neural-data\',nev_file_name(i_file).name],'mat','trc');
         
-%         writeTRCFile(md_opensim{i_file},trc_fname);
+        writeTRCFile(md_opensim{i_file},trc_fname);
     end
 
     
 %% load in opensim data (if we want to do that)
-    for i_file = 1:numel(cds_list)
-        % check for open sim files?
-        
-    end
+% check for open sim folder
+    opensim_dir = [input_data.folderpath,'\opensim'];
+    var_list = {'joint_ang','joint_vel','joint_dyn','muscle_len','muscle_vel',...
+        'hand_pos','hand_vel','hand_acc','elbow_pos','elbow_vel','elbow_acc'}; % JOINT ACC IS LEFT OUT FOR NOW
+    
+    if(isdir(opensim_dir))
+        for i_cds = 1:numel(cds_list)
+            for i_var = 1:numel(var_list)
+                cds_list{i_cds}.loadOpenSimData(opensim_dir,var_list{i_var});
+                cds_list{i_cds}.sanitizeTimeWindows()
+                
+            end
+        end
+    end    
+
     
     
 %% convert to trial data
