@@ -91,11 +91,7 @@ def load_2d_data(config, vid_indices, bp_interested):
                 coords_adj[i_frame,:,:] = out['coords'][all_frame_list[ix_cam][i_frame],:,:]
                 scores_adj[i_frame,:] = out['scores'][all_frame_list[ix_cam][i_frame],:]
                 is_good_frame[i_frame] = 1
-            
-            # previous attempt to do this, which I think was close, but confusing
-            #coords_adj[all_frame_list[ix_cam][good_frame_nums[i_coord]],:,:] = out['coords'][i_coord,:,:]
-            #scores_adj[all_frame_list[ix_cam][good_frame_nums[i_coord]],:] = out['scores'][i_coord,:]
-            #is_good_frame[all_frame_list[ix_cam][good_frame_nums[i_coord]]] = 1
+
             
         all_points_raw.append(coords_adj)
         all_scores.append(scores_adj)

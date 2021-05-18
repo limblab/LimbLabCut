@@ -28,13 +28,13 @@ from utils.triangulation_utils import add_static_points
 
 
 # set project folder 
-project_folder = r'D:\Lab\Data\DLC_videos\Han_20201222_rwTwoPlanes'
+project_folder = r'D:\Lab\Data\DLC_videos\Han_20201204_rwFreeReach'
 
 # determine if we are using filtered data or not
 use_filtered_data = True
 
 # using reference frame or use an arbitrary frame?
-use_reference_frame = False
+use_reference_frame = True
 
 # set number of cameras
 n_cams = 4
@@ -48,7 +48,7 @@ parsed_toml = toml.load(calib_folder + r'\config_master.toml')
 
 # upate calib video path and prefix and extension
 parsed_toml['calibration']['calib_video_path'] = project_folder + r'\videos\calib'
-parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201222_0000'
+parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201204_0000'
 
 
 
@@ -99,7 +99,7 @@ config = load_config(recon_config_file)
 calibrate_intrinsic(config)
 calibrate_extrinsic(config)
 
-# add static points if reference frame is provided 
+#%% add static points if reference frame is provided 
 if(use_reference_frame):
     labels = ['pointX', 'pointY', 'pointZ']
     
