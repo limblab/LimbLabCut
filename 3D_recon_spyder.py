@@ -28,7 +28,7 @@ from utils.triangulation_utils import add_static_points
 
 
 # set project folder 
-project_folder = r'D:\Lab\Data\DLC_videos\Han_20201204_rwFreeReach'
+project_folder = r'D:\Lab\Data\DLC_videos\Han_20210630_rwFreeReach'
 
 # determine if we are using filtered data or not
 use_filtered_data = True
@@ -48,7 +48,7 @@ parsed_toml = toml.load(calib_folder + r'\config_master.toml')
 
 # upate calib video path and prefix and extension
 parsed_toml['calibration']['calib_video_path'] = project_folder + r'\videos\calib'
-parsed_toml['calibration']['calib_video_prefix'] = 'Calib_20201204_0000'
+parsed_toml['calibration']['calib_video_prefix'] = 'Calib_Han_20210630_0000'
 
 
 
@@ -86,7 +86,7 @@ parsed_toml['triangulation']['reconstruction_output_path'] = project_folder + r'
 # update labeling scheme and bodyparts interested
 # only need to update if using something other than base arm points
 parsed_toml['labeling']['scheme'] = []
-parsed_toml['labeling']['bodyparts_interested'] = ['shoulder','elbow1','elbow2','wrist1','wrist2','hand1','hand2','hand3','pointX','pointY','pointZ']
+parsed_toml['labeling']['bodyparts_interested'] = ['back1','shoulder1','elbow1','elbow2','wrist1','wrist2','hand1','hand2','hand3','pointX','pointY','pointZ','pinky1','pinky2','wand','cup']
 
 recon_config_file = project_folder + r'\recon_config.toml'
 

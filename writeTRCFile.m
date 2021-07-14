@@ -14,7 +14,7 @@ function [  ] = writeTRCFile( md_opensim,fname )
     nmarkers = (size(md_opensim,2)-1)/3; % don't count time field
     markers = md_opensim.Properties.VariableNames(1:3:end);
     keep_mask = ~strcmpi(markers,'t');
-    markers = markers(keep_mask==1);
+    
     % rename markers to match opensim names. NOTE: the opensim names should
     % be changed in the future, but I (Joseph) don't want to mess with too
     % many things at once
@@ -24,6 +24,8 @@ function [  ] = writeTRCFile( md_opensim,fname )
     for i_m = 1:numel(markers)
         switch(markers{i_m})
             case 'shoulder_x'
+                markers{i_m} = 'Shoulder_JC';
+            case 'shoulder1_x'
                 markers{i_m} = 'Shoulder_JC';
             case 'elbow1_x'
                 markers{i_m} = 'Pronation_Pt1';
@@ -39,8 +41,15 @@ function [  ] = writeTRCFile( md_opensim,fname )
                 markers{i_m} = 'Marker_1';
             case 'hand3_x'
                 markers{i_m} = 'Marker_3';
+            otherwise
+                keep_mask(i_m) = 0;
         end
     end
+    
+    markers = markers(keep_mask==1);
+    nmarkers = numel(markers);
+    
+    
     
     % now loop through each maker name and make marker name with 3 tabs for the
     % first line and the X Y Z columns with the marker number on the second

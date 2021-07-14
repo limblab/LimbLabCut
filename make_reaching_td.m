@@ -1,8 +1,9 @@
 %% setup initial parameters and data folder   
 
-    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20201204_rwFreeReach\'; % DLC project folder
+    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20210709_freeReachWeight\'; % DLC project folder
     
     mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Han_13B1\map files\Left S1\SN 6251-001459.cmp';
+%     mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Crackle 18E2\Map Files\Left S1\SN 6251-001695.cmp';
     
     use_td = 1;
     
@@ -26,10 +27,10 @@
 
     nev_file_name = dir('neural-data\*nev*');
     
-%     % remove filename with .mat, also switch .mat to .nev
+    % remove filename with .mat, also switch .mat to .nev
     keep_mask = ones(size(nev_file_name));
     for i_nev = 1:numel(nev_file_name)
-        nev_file_name(i_nev).name = [nev_file_name(i_nev).name(1:end-3),'mat'];
+%         nev_file_name(i_nev).name = [nev_file_name(i_nev).name(1:end-3),'mat'];
         if(~isempty(strfind(nev_file_name(i_nev).name,'-s')))
             keep_mask(i_nev) = 0;
         end
@@ -42,7 +43,6 @@
     task_list = cell(numel(nev_file_name),1);
     cds_list = cell(numel(nev_file_name),1);
     td_list = cell(numel(nev_file_name),1);
-    
     
     for i_file = 1:numel(nev_file_name)
         % number is last 3 values in filename
@@ -76,7 +76,7 @@
     
 %% load in 3D reaching data and place in cds. Need entire num_list since that is the order the csv files are in 
     % e.g: csv_0 = min value in num_list, then it increases and so on
-    for i_file = 1:numel(dlc_file_name)
+    for i_file = 1%:numel(dlc_file_name)
         cds_list{i_file}.loadRawMarkerDataDLC([dlc_file_name(i_file).folder,filesep,dlc_file_name(i_file).name]);
     end
 
@@ -99,7 +99,9 @@
     
     if(isdir(opensim_dir))
         for i_cds = 1:numel(cds_list)
+            disp(i_cds)
             for i_var = 1:numel(var_list)
+                disp(i_var)
                 cds_list{i_cds}.loadOpenSimData(opensim_dir,var_list{i_var});
                 cds_list{i_cds}.sanitizeTimeWindows()
                 

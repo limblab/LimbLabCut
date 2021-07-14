@@ -32,7 +32,9 @@ function [md_opensim_pos,handle_opensim] = transformForOpenSimDLC(cds)
 % Origin at shoulder joint center (marker 9), x is towards screen, y is up, z is to right
     analog_idx = 0;
     for i_an = 1:numel(cds.analog)
-        if(sum(strcmpi(cds.analog{i_an}.Properties.VariableNames,'shoulder_x')) >= 1)
+        if(sum(strcmpi(cds.analog{i_an}.Properties.VariableNames,'shoulder1_x')) >= 1)
+            analog_idx = i_an;
+        elseif(sum(strcmpi(cds.analog{i_an}.Properties.VariableNames,'shoulder_x')) >= 1)
             analog_idx = i_an;
         end
     end
@@ -47,8 +49,14 @@ function [md_opensim_pos,handle_opensim] = transformForOpenSimDLC(cds)
     
     
     % extract and clean up shoulder jc data
-    markername = 'shoulder';
-    shoulder_pos_lab = [md_opensim_pos.([markername,'_x']),md_opensim_pos.([markername,'_y']),md_opensim_pos.([markername,'_z'])];
+    
+    if(any(strcmpi(md_opensim_pos.Properties.VariableNames,'shoulder_x')))
+        markername = 'shoulder';
+        shoulder_pos_lab = [md_opensim_pos.([markername,'_x']),md_opensim_pos.([markername,'_y']),md_opensim_pos.([markername,'_z'])];
+    elseif(any(strcmpi(md_opensim_pos.Properties.VariableNames,'shoulder1_x')))
+        markername = 'shoulder1';
+        shoulder_pos_lab = [md_opensim_pos.([markername,'_x']),md_opensim_pos.([markername,'_y']),md_opensim_pos.([markername,'_z'])];
+    end
     marker_loss_points = find(diff(isnan(shoulder_pos_lab(:,1)))>0);
     marker_reappear_points = find(diff(isnan(shoulder_pos_lab(:,1)))<0);
     
