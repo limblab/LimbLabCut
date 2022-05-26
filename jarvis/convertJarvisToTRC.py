@@ -77,15 +77,24 @@ for i in open_data.columns.levels[0]:
         temp_data = open_data[i] - zero_data
         
         
-        # do the conversion in two steps to avoid bugs?
+        # do the conversion in two steps to avoid bugs....
         # DLC/Jarvis -> ncams: x->y, y->x, z->-z
-        # ncams ->opensim: x->-x, y-?
-        #copy_data = temp_data.copy()
-        #temp_data['x'] = copy_data['y']
-        #temp_data['y'] = copy_data['x']
-        #temp_data['z'] = -copy_data['z']
+        copy_data = temp_data.copy()
+        temp_data['x'] = copy_data['y']
+        temp_data['y'] = copy_data['x']
+        temp_data['z'] = -copy_data['z']
         
-        # full rotation -> x->-y, y->z, z->-x
+        # ncams ->opensim: x->z, y->-y, z->x
+        copy_data = temp_data.copy()
+        temp_data['x'] = copy_data['z']
+        temp_data['y'] = -copy_data['y']
+        temp_data['z'] = copy_data['x']
+        
+        # full rotation: x->-z, y->-x, z->y ??
+        
+        
+        # I think the below is wrong...
+        #full rotation -> x->-y, y->z, z->-x
         #copy_data = temp_data.copy()
         #temp_data['x'] = -copy_data['y']
         #temp_data['y'] = copy_data['z']
