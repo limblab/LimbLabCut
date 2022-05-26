@@ -1,14 +1,16 @@
 %% setup initial parameters and data folder   
 
-    input_data.folderpath = 'D:\Lab\Data\DLC_videos\Han_20210709_freeReachWeight\'; % DLC project folder
+    input_data.folderpath = 'D:\Lab\Data\FreeReaching\Rocket_20210723\'; % DLC project folder
     
-    mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Han_13B1\map files\Left S1\SN 6251-001459.cmp';
+%     mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Han_13B1\map files\Left S1\SN 6251-001459.cmp';
 %     mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Crackle 18E2\Map Files\Left S1\SN 6251-001695.cmp';
+    mapFileName = 'R:\limblab\lab_folder\Animal-Miscellany\Rocket_19L1\MapFile\3a-area2\6251-002088\SN 6251-002088.cmp';
     
+    % for rocket, not using a map file...
     use_td = 1;
     
     input_data.array = 'arrayLeftS1';
-    input_data.monkey = 'monkeyHan';
+    input_data.monkey = 'monkeyRocket';
     input_data.ranBy = 'ranByJoe';
     input_data.lab = 6;
     input_data.mapFile = strcat('mapFile',mapFileName);
@@ -30,7 +32,7 @@
     % remove filename with .mat, also switch .mat to .nev
     keep_mask = ones(size(nev_file_name));
     for i_nev = 1:numel(nev_file_name)
-%         nev_file_name(i_nev).name = [nev_file_name(i_nev).name(1:end-3),'mat'];
+        nev_file_name(i_nev).name = [nev_file_name(i_nev).name(1:end-3),'mat'];
         if(~isempty(strfind(nev_file_name(i_nev).name,'-s')))
             keep_mask(i_nev) = 0;
         end
@@ -43,7 +45,7 @@
     task_list = cell(numel(nev_file_name),1);
     cds_list = cell(numel(nev_file_name),1);
     td_list = cell(numel(nev_file_name),1);
-    
+
     for i_file = 1:numel(nev_file_name)
         % number is last 3 values in filename
         num_list(i_file) = str2num(nev_file_name(i_file).name(end-6:end-4));
@@ -74,18 +76,22 @@
     nev_file_name = nev_file_name(sort_idx);
     
     
+    
 %% load in 3D reaching data and place in cds. Need entire num_list since that is the order the csv files are in 
     % e.g: csv_0 = min value in num_list, then it increases and so on
-    for i_file = 1%:numel(dlc_file_name)
+    for i_file = 1:numel(dlc_file_name)
         cds_list{i_file}.loadRawMarkerDataDLC([dlc_file_name(i_file).folder,filesep,dlc_file_name(i_file).name]);
     end
 
+    
+    
 %% convert DLC data to open sim data and make a .trc file
     md_opensim = {};
     for i_file = 1:numel(cds_list)
         md_opensim{i_file} = transformForOpenSimDLC(cds_list{i_file});
         
         trc_fname = strrep([input_data.folderpath,'neural-data\',nev_file_name(i_file).name],'mat','trc');
+%         trc_fname = strrep([input_data.folderpath,'neural-data\',nev_file_name(i_file).name],'-adj.mat','.trc');
         
         writeTRCFile(md_opensim{i_file},trc_fname);
     end
@@ -115,7 +121,7 @@
 % if(use_td)
     td_params = [];
     td_params.all_points = 1;
-    td_params.include_ts = 0;
+    td_params.include_ts = 1;
     for i_cds = 1:numel(cds_list)
         if(~isempty(strfind(task_list{i_cds},'RT3D')) || isempty(cds_list{i_cds}.trials))
             td_params.noTrials=true;
