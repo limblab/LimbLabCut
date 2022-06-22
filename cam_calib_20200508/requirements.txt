@@ -1,4 +1,4 @@
-numpy==1.16.4
+numpy==1.22.0
 checkerboard==0.2.4
 matplotlib==3.0.3
 opencv_python==3.4.11.45
